@@ -3,8 +3,6 @@ import os
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from starlette.responses import HTMLResponse, FileResponse
-from starlette.staticfiles import StaticFiles
 
 import auth
 import models
@@ -18,8 +16,6 @@ if not os.path.exists('.\mysqldb'):
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 def get_db():
     db = SessionLocal()
@@ -43,10 +39,6 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         data={"sub": owner.name}
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
-@app.get("/", response_class=HTMLResponse)
-def read_root():
-    return FileResponse("static/index.html")
 
 @app.post("/restaurant/", response_model=schemas.Restaurant)
 def create_restaurant(restaurant: schemas.RestaurantCreate, db: Session = Depends(get_db)):

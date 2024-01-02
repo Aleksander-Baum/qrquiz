@@ -3,70 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <title>Basisproject frontend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Restaurant Frontend</h1>
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center display-3 fw-bold">Restaurant Frontend</h1>
+            <div class="bg-light border rounded">
 
-    <h2>All restaurants</h2>
-    <ul id="restaurants-list"></ul>
+                <div class="my-4 m-2">
+                    <h2 class="text-center text-primary">All restaurants</h2>
+                    <ul class="list-group" id="restaurants-list">
+                    </ul>
+                </div>
 
-    <h2>Add restaurant</h2>
-    <form id="restaurant-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+                <h2>Add restaurant</h2>
+                <form id="restaurant-form">
+                    <label class="form-label" for="name">Name:</label>
+                    <input type="text" class="form-control mb-3" id="name" name="name" required>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required>
+                    <label class="form-label" for="address">Address:</label>
+                    <input type="text" class="form-control  mb-3" id="address" name="address" required>
 
-        <label for="rating">Rating:</label>
-        <input type="float" id="rating" name="rating" required>
+                    <label class="form-label" for="rating">Rating:</label>
+                    <input type="float" class="form-control mb-3" id="rating" name="rating" required>
 
-        <button type="submit">Add restaurant</button>
-    </form>
+                    <button class="btn btn-primary" type="submit">Add restaurant</button>
+                </form>
 
-    <h2>All owners</h2>
-    <ul id="owners-list"></ul>
 
-    <h2>Add owner</h2>
-    <form id="owner-form">
-        <label for="ownername">Name:</label>
-        <input type="text" id="ownername" name="ownername" required>
+                <div class="my-4 m-2">
+                    <h2 class="text-center text-primary">All owners</h2>
+                    <ul class="list-group" id="owners-list">
 
-        <label for="telephone">Telephone:</label>
-        <input type="text" id="telephone" name="telephone" required>
+                    </ul>
+                </div>
 
-        <label for="restaurant_id">Restaurant ID:</label>
-        <input type="number" id="restaurant_id" name="restaurant_id" required>
 
-        <button type="submit">Add owner</button>
-    </form>
+                <h2>Add owner</h2>
+                <form id="owner-form">
+                    <label class="form-label" for="ownername">Name:</label>
+                    <input class="form-control mb-3" type="text" id="ownername" name="ownername" required>
 
-    <h2>Menu items from restaurant</h2>
-    <div id="getrestaurantitem-form">
-        <label for="get_restaurant_id">Restaurant ID:</label>
-        <input type="number" id="get_restaurant_id" name="get_restaurant_id" required>
+                    <label class="form-label" for="telephone">Telephone:</label>
+                    <input class="form-control mb-3" type="text" id="telephone" name="telephone" required>
 
-        <button onclick="getMenuItemsFromID()">Get items from restaurant</button>
+                    <label class="form-label" for="restaurant_id">Restaurant ID:</label>
+                    <input class="form-control mb-3" type="number" id="restaurant_id" name="restaurant_id" required>
+
+                    <button class="btn btn-primary" type="submit">Add owner</button>
+                </form>
+
+                <h2>Menu items from restaurant</h2>
+                <div id="getrestaurantitem-form">
+                    <label class="form-label" for="get_restaurant_id">Restaurant ID:</label>
+                    <input class="form-control mb-3" type="number" id="get_restaurant_id" name="get_restaurant_id" required>
+
+                    <button class="btn btn-primary" onclick="getMenuItemsFromID()">Get items from restaurant</button>
+                </div>
+
+
+                <div class="my-4 m-2">
+                    <ul class="list-group" id="restaurant-item-list">
+
+                    </ul>
+                </div>
+
+                <h2>Add menu item</h2>
+                <form id="restaurantitem-form">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="item_name">Item Name:</label>
+                            <input class="form-control mb-3" type="text" id="item_name" name="item_name" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="description">Description:</label>
+                            <input class="form-control mb-3" type="text" id="description" name="description" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="price">Price:</label>
+                            <input class="form-control mb-3" type="float" id="price" name="price" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="item_restaurant_id">Restaurant ID:</label>
+                            <input class="form-control mb-3" type="number" id="item_restaurant_id" name="item_restaurant_id" required>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Add menu item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <ul id="restaurant-item-list"></ul>
-
-    <h2>Add menu item</h2>
-    <form id="restaurantitem-form">
-        <label for="item_name">Item Name:</label>
-        <input type="text" id="item_name" name="item_name" required>
-
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required>
-
-        <label for="price">Price:</label>
-        <input type="float" id="price" name="price" required>
-
-        <label for="item_restaurant_id">Restaurant ID:</label>
-        <input type="number" id="item_restaurant_id" name="item_restaurant_id" required>
-
-        <button type="submit">Add menu item</button>
-    </form>
 
     <script>
         async function createRestaurant(event) {
@@ -105,11 +133,15 @@
             restaurantList.innerHTML = '';
 
             data.forEach(restaurant => {
-               const listRestaurant = document.createElement('li');
-               listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating} - ID: ${restaurant.id}`;
+                const listRestaurant = document.createElement('li');
+                listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating} - ID: ${restaurant.id}`;
 
-               restaurantList.appendChild(listRestaurant)
+                // Add class to the created <li> element
+                listRestaurant.classList.add('list-group-item');
+
+                restaurantList.appendChild(listRestaurant);
             });
+
         }
 
         async function createOwner(event) {
@@ -150,6 +182,7 @@
             data.forEach(owner => {
                const listOwner = document.createElement('li');
                listOwner.textContent = `Owner name: ${owner.name} - Telephone: ${owner.telephone} - Restaurant ID: ${owner.restaurant_id}`;
+               listOwner.classList.add('list-group-item');
 
                ownerList.appendChild(listOwner)
             });
@@ -194,6 +227,7 @@
             data.forEach(item => {
                const listItem = document.createElement('li');
                listItem.textContent = `Menu item name: ${item.item_name} - Description: ${item.description} - Price: ${item.price}`;
+               listItem.classList.add('list-group-item');
 
                itemList.appendChild(listItem)
             });
@@ -206,5 +240,6 @@
         getRestaurants()
         getOwners()
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
