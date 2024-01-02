@@ -1,9 +1,11 @@
 # Eindproject Aleksander Baum
 ## 2CCS01 - r0930134
 
-LINK HOSTED API: 
+DE DOCUMENTATIE VOOR DIT PROJECT IS GROTENDEELS HETZELFDE ALS HET BASISPROJECT, OMDAT IK VERDER HEB GEBOUWD OP HET VORIGE. HET GROOTSTE DEEL ZAL DUS HETZELFDE LIJKEN, MAAR ER ZIJN DELEN TOEGEVOEGD.
 
-Voor dit project heb ik verkozen een restaurant API uit te werken. De werking achter restaurants interesseert me wel, en een API hierover kan ook makkelijk uitgebreid worden als dit nodig is. 
+LINK HOSTED API: Okteto passlib/auth error waardoor het niet gehost kon worden, lokaal werkte perfect.
+
+Voor dit project heb ik verkozen om verder te bouwen op mijn restaurant API. Hierbij kon ik de een PUT functie toevoegen en een frontend uitwerken.
 
 In mijn API zijn er 3 soorten data: Restaurants, Owners en Menu Items. Dit is zowat de basis dat een restaurant API moet hebben.
 
@@ -29,12 +31,15 @@ Zoals hiervoor vermeld had ik verkozen SQLite te vervangen door MySQL om wat ext
 
 Hierbij heb ik ook nog een simpele front-end toegevoegd. Je kan hier alle simpele functies uitvoeren: restaurant, owner, en menu item toevoegen. Alle restaurants en owners worden automatisch getoond en menu items kan je krijgen door een restaurant id in te vullen.
 
-### Simple Frontend
-![frontend](https://github.com/Aleksander-Baum/basisproject/assets/113974461/150077e9-5163-4012-9edc-461de69f499c)
+### Uitgewerkte Frontend
+
 
 ## Werking API Postman
 ### Create restaurant
 ![1Add Restaurant](https://github.com/Aleksander-Baum/basisproject/assets/113974461/81421410-b82a-4ca9-b4a2-942a3208973c)
+
+### Edit restaurant
+
 
 ### Read restaurants
 ![2Show Restaurants](https://github.com/Aleksander-Baum/basisproject/assets/113974461/2ccb5ba7-55b8-4c86-8ff9-f2f604c05fea)
