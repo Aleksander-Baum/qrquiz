@@ -37,7 +37,14 @@ Daarbij is ook nog een simpele frontend toegevoegd. Je kan hier alle simpele fun
 ### Uitgewerkte Frontend
 Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezorgd dat mijn front-end online staat met een simpele opmaak. De front-end zelf zou moeten werken wegens de Javascript in het bestand zelf (er is dus geen gebruik gemaakt van bijvoorbeeld Vue of React.). Hiermee bedoel ik dus dat de Javascript probeert de API te bereiken als hij zou runnen op Okteto. Hopelijk kan ik dus nog wat punten verdienen met punt 3.1.1 en 3.1.2.
 
+**Basic website**
+![Frontend_Screen](https://github.com/Aleksander-Baum/eindproject/assets/113974461/079570db-60dc-4f81-b570-51f0d3267d9c)
 
+**Configuration Netlify aleksander-api domain**
+![site_setup_netlify](https://github.com/Aleksander-Baum/eindproject/assets/113974461/fe1652b4-bd18-4e72-91a1-0a21c07469c9)
+
+**Auto-publishing proof (linked to the index file in this repo)**
+![Proof_auto_publishing](https://github.com/Aleksander-Baum/eindproject/assets/113974461/bccac923-f19f-41ec-8976-4452c08507d2)
 
 ## Werking API Postman
 ### Login with owner, enter credentials
