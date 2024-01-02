@@ -10,7 +10,7 @@ Voor dit project heb ik verkozen om verder te bouwen op mijn restaurant API. Hie
 In mijn API zijn er 3 soorten data: Restaurants, Owners en Menu Items. Dit is zowat de basis dat een restaurant API moet hebben.
 
 ### Restaurants
-Hierin wordt het id, naam, address en rating opgeslagen. Het id wordt automatisch gegeven. De rest van de data kan de gebruiker zelf invullen. Een restaurant kan je toevoegen en je kan ook alle restaurants tonen, of een specifiek restaurant door het id in te vullen.
+Hierin wordt het id, naam, address en rating opgeslagen. Het id wordt automatisch gegeven. De rest van de data kan de gebruiker zelf invullen. Een restaurant kan je toevoegen en je kan ook alle restaurants tonen, of een specifiek restaurant door het id in te vullen. Het aanpassen van het address van het restaurant is nu ook mogelijk.
 
 ### Owners
 Hierin wordt het id, naam, telefoonnummer en het restaurant dat zij beheren opgeslagen, maar ook hun wachtwoord. Het id wordt ook automatisch toegepast, maar de rest van de data kan de gebruiker zelf invullen. Een owner kan je toevoegen, en je kan alle owners tonen in een lijst.
@@ -24,12 +24,12 @@ In totaal zijn er 5 GET, 3 POST en 1 DELETE en 1 PUT endpoints. Validaties heb i
 In de beschrijving van het eindproject staat geschreven dat SQLite moet gebruikt worden, maar omdat ik bij het eerste deel gekozen had me MySQL te werken is dit hier ook zo.
 
 ### Deploying
-Mijn API wordt correct naar een docker opgebouwd dankzij automatische GitHub Actions. De deployment naar Okteto werkt helaas niet wegens een passlib error die ik niet opgelost krijg.
+Mijn API wordt correct naar een docker opgebouwd dankzij automatische GitHub Actions. De deployment naar Okteto werkt helaas niet wegens een passlib error die ik niet opgelost krijg. Het deployen van de frontend gebeurt met Netlify.
 
 ### Bijkomende componenten
 Om verder te bouwen op het basisproject is er deze keer ook een PUT-functie toegevoegd om het adres van restaurants aan te passen, maar is er ook gezorgd voor login mogelijkheid met hashing en OAuth.
 
-Daarbij is ook nog een simpele frontend toegevoegd. Je kan hier alle simpele functies uitvoeren: restaurant, owner, en menu item toevoegen. Alle restaurants en owners worden automatisch getoond en menu items kan je krijgen door een restaurant id in te vullen.
+Daarbij is ook nog een simpele frontend toegevoegd. Je kan hier alle simpele functies uitvoeren: restaurant, owner, en menu item toevoegen. Alle restaurants en owners worden automatisch getoond en menu items kan je krijgen door een restaurant id in te vullen. Dit is te bereiken via Netlify, helaas kan hier de API dus niet gebruikt worden wegens de passlib error.
 
 ### Uitgewerkte Frontend
 
