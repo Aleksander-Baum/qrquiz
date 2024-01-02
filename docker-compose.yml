@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+ restaurant-service:
+  image: r0930134/eindproject
+  ports:
+    - "8000:8000"
+
+ mysql:
+  image: mysql:latest
+  volumes:
+    - restaurant-data:/code/mysqldb
+  environment:
+    MYSQL_ROOT_PASSWORD: abc123!
+    MYSQL_DATABASE: restaurantdb
+
+volumes:
+  restaurant_data:
