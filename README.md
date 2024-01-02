@@ -36,6 +36,8 @@ Daarbij is ook nog een simpele frontend toegevoegd. Je kan hier alle simpele fun
 ### Uitgewerkte Frontend
 Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezorgd dat mijn front-end online staat met een simpele opmaak. De front-end zelf zou moeten werken wegens de Javascript in het bestand zelf (er is dus geen gebruik gemaakt van bijvoorbeeld Vue of React.). Hiermee bedoel ik dus dat de Javascript probeert de API te bereiken als hij zou runnen op Okteto. Hopelijk kan ik dus nog wat punten verdienen met punt 3.1.1 en 3.1.2. De data die u dus ziet is van een lokale instantie.
 
+
+
 ## Werking API Postman
 ### Login with owner, enter credentials
 ![auth_before](https://github.com/Aleksander-Baum/eindproject/assets/113974461/34d101ce-5214-411a-8cf6-721fc6d784ba)
@@ -58,11 +60,11 @@ Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezor
 ### Read restaurants
 ![2Show Restaurants](https://github.com/Aleksander-Baum/basisproject/assets/113974461/2ccb5ba7-55b8-4c86-8ff9-f2f604c05fea)
 
-### Read specifi restaurant
+### Read specific restaurant
 ![3Show Specifig Restaurant](https://github.com/Aleksander-Baum/basisproject/assets/113974461/666edcb6-5f48-42b1-9917-4853caefaecf)
 
 ### Create owner
-![4Add Owner](https://github.com/Aleksander-Baum/basisproject/assets/113974461/97854ae9-5f78-4bba-8b51-1bdbb46c274f)
+![Owner_create](https://github.com/Aleksander-Baum/eindproject/assets/113974461/a8c07529-1aa9-4d73-b56f-e3f159dbac1c)
 
 ### Read owners
 ![5Show Owners](https://github.com/Aleksander-Baum/basisproject/assets/113974461/7f8dc11a-be3f-4e13-b3d6-e42d782667bb)
@@ -77,11 +79,17 @@ Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezor
 ![8Delete Item](https://github.com/Aleksander-Baum/basisproject/assets/113974461/6701a079-d1b6-45c0-84c7-fbf691532e49)
 
 ## OpenAPI Docs screenshots
-![1OpenAPI](https://github.com/Aleksander-Baum/basisproject/assets/113974461/2414073c-6bff-4225-ba3e-ee6a7fe6ff6e)
-![2OpenAPI](https://github.com/Aleksander-Baum/basisproject/assets/113974461/66e02043-187a-47ea-a8c4-f4dc5f75c19c)
+![Default_OpenAPI](https://github.com/Aleksander-Baum/eindproject/assets/113974461/101e8d4b-f14d-4392-9420-6feceabe0a45)
+![Schemas_OpenAPI](https://github.com/Aleksander-Baum/eindproject/assets/113974461/998568e8-44f9-48f6-95b4-8eb65c303c4d)
+
+### Authorization OAuth
+![Auth_Screen](https://github.com/Aleksander-Baum/eindproject/assets/113974461/a3f96391-5a45-491c-887f-c1568a716c63)
 
 ### POST /restaurant/
 ![POSTrestaurant](https://github.com/Aleksander-Baum/basisproject/assets/113974461/7d5ac89f-8c3a-41a0-bcd9-92a219162c4c)
+
+### PUT /restaurant/
+![Put_Address](https://github.com/Aleksander-Baum/eindproject/assets/113974461/ab5b0dbf-bbaf-4568-83f3-b859ea6cd39a)
 
 ### GET /restaurants/
 ![GETrestaurants](https://github.com/Aleksander-Baum/basisproject/assets/113974461/7b968d46-8219-4262-9205-a2b4651def81)
@@ -90,7 +98,7 @@ Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezor
 ![GETrestaurantsID](https://github.com/Aleksander-Baum/basisproject/assets/113974461/638fb5c0-0ba3-4740-8b4a-1bc3786bb24f)
 
 ### POST /owner/
-![POSTowner](https://github.com/Aleksander-Baum/basisproject/assets/113974461/0b1a169f-bc84-4438-8917-793d4ea2e8d1)
+![Post_Owner](https://github.com/Aleksander-Baum/eindproject/assets/113974461/40718a33-b2af-4922-91cc-d67ef1461688)
 
 ### GET /owners/
 ![GETowners](https://github.com/Aleksander-Baum/basisproject/assets/113974461/eae29037-cc9e-47aa-a23e-1502418063af)
