@@ -3,7 +3,9 @@
 
 DE DOCUMENTATIE VOOR DIT PROJECT IS GROTENDEELS HETZELFDE ALS HET BASISPROJECT, OMDAT IK VERDER HEB GEBOUWD OP HET VORIGE. HET GROOTSTE DEEL ZAL DUS HETZELFDE LIJKEN, MAAR ER ZIJN DELEN TOEGEVOEGD.
 
-LINK HOSTED API: Okteto passlib/auth error waardoor het niet gehost kon worden, lokaal werkte perfect.
+LINK HOSTED API (Okteto): Okteto passlib/auth error waardoor het niet gehost kon worden, lokaal werkte perfect.
+
+LINK FRONT-END: https://aleksander-api.netlify.app/
 
 Voor dit project heb ik verkozen om verder te bouwen op mijn restaurant API. Hierbij kon ik de een PUT functie toevoegen en een frontend uitwerken.
 
@@ -32,7 +34,7 @@ Om verder te bouwen op het basisproject is er deze keer ook een PUT-functie toeg
 Daarbij is ook nog een simpele frontend toegevoegd. Je kan hier alle simpele functies uitvoeren: restaurant, owner, en menu item toevoegen. Alle restaurants en owners worden automatisch getoond en menu items kan je krijgen door een restaurant id in te vullen. Dit is te bereiken via Netlify, helaas kan hier de API dus niet gebruikt worden wegens de passlib error.
 
 ### Uitgewerkte Frontend
-
+Toevoeging: omdat mijn API niet wil werken via Okteto, heb ik er toch voor gezorgd dat mijn front-end online staat met een simpele opmaak. De front-end zelf zou moeten werken wegens de Javascript in het bestand zelf (er is dus geen gebruik gemaakt van bijvoorbeeld Vue of React.). Hiermee bedoel ik dus dat de Javascript probeert de API te bereiken als hij zou runnen op Okteto. Hopelijk kan ik dus nog wat punten verdienen met punt 3.1.1 en 3.1.2. De data die u dus ziet is van een lokale instantie.
 
 ## Werking API Postman
 ### Login with owner, enter credentials
