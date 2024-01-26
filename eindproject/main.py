@@ -1,10 +1,13 @@
 import os
 
-from fastapi import FastAPI, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import FastAPI, Depends, HTTPException, WebSocket
+from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, FileResponse
+from pyzbar.pyzbar import decode
 from sqlalchemy.orm import Session
+from starlette.staticfiles import StaticFiles
 
-import auth
 import models
 import schemas
 import crud
@@ -17,80 +20,123 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+origins = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+qr_code_dict = {}
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+@app.get("/", response_class=HTMLResponse)
+def read_root():
+    return FileResponse("static/index.html")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        if data == "start_scan":
+            # Call your QR code scanning logic here
+            # For example: read_qr_code(frame)
+            # Process the data and emit the result using websocket.send_text(result)
+            await websocket.send_text(jsonable_encoder({"message": "Scanning started."}))
+        elif data == "stop_scan":
+            # Stop QR code scanning logic
+            # For example: stop_scan()
+            # Optionally, you can send a message indicating that scanning has stopped
+            await websocket.send_text(jsonable_encoder({"message": "Scanning stopped."}))
 
-@app.post("/token")
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    owner = auth.authenticate_owner(db, form_data.username, form_data.password)
-    if not owner:
-        raise HTTPException(
-            status_code=401,
-            detail="Incorrect name or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token= auth.create_access_token(
-        data={"sub": owner.name}
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+@app.post("/quiz/", response_model=schemas.Quiz)
+def create_quiz(quiz: schemas.QuizCreate, db: Session = Depends(get_db)):
+    return crud.create_quiz(db=db, quiz=quiz)
 
-@app.post("/restaurant/", response_model=schemas.Restaurant)
-def create_restaurant(restaurant: schemas.RestaurantCreate, db: Session = Depends(get_db)):
-    return crud.create_restaurant(db=db, restaurant=restaurant)
+@app.get("/quizzes/", response_model=list[schemas.Quiz])
+def read_quizzes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    quizzes = crud.get_quizzes(db, skip, limit)
+    return quizzes
 
-@app.put("/restaurant/{restaurant_id}", response_model=schemas.Restaurant)
-def update_restaurant(restaurant_id: int, address: str, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
-    update = crud.update_restaurant(db=db, restaurant_id=restaurant_id, address=address)
-    return update
+@app.get("/quizzes/{quiz_id}", response_model=schemas.Quiz)
+def read_quiz(quiz_id: int, db: Session = Depends(get_db)):
+    db_quiz = crud.get_quiz(db, quiz_id=quiz_id)
+    if db_quiz is None:
+        raise HTTPException(status_code=404, detail="Quiz not found")
+    return db_quiz
 
-@app.get("/restaurants/", response_model=list[schemas.Restaurant])
-def read_restaurants(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    restaurants = crud.get_restaurants(db, skip, limit)
-    return restaurants
+@app.post("/teacher/", response_model=schemas.Teacher)
+def create_teacher(teacher: schemas.TeacherCreate, db: Session = Depends(get_db)):
+    return crud.create_teacher(db=db, teacher=teacher)
 
-@app.get("/restaurants/{restaurant_id}", response_model=schemas.Restaurant)
-def read_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
-    db_restaurant = crud.get_restaurant(db, restaurant_id=restaurant_id)
+@app.get("/teachers/", response_model=list[schemas.Teacher])
+def read_teachers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    teachers = crud.get_teachers(db, skip, limit)
+    return teachers
 
-    if db_restaurant is None:
-        raise HTTPException(status_code=404, detail="Restaurant not found")
+@app.post("/question/", response_model=schemas.Question)
+def create_quiz_question(quiz_question: schemas.QuestionCreate, db: Session = Depends(get_db)):
+    return crud.create_quiz_questions(db=db, quiz_question=quiz_question)
 
-    return db_restaurant
+@app.get("/questions/{quiz_id}", response_model=list[schemas.Question])
+def read_quiz_questions(quiz_id: int, db: Session = Depends(get_db)):
+    quiz_questions = crud.get_quiz_questions(db, quiz_id)
 
-@app.post("/owner/", response_model=schemas.Owner)
-def create_owner(owner: schemas.OwnerCreate, db: Session = Depends(get_db)):
-    return crud.create_owner(db=db, owner=owner)
+    if not quiz_questions:
+        raise HTTPException(status_code=404, detail="Quiz not found or no questions in quiz")
 
-@app.get("/owners/", response_model=list[schemas.Owner])
-def read_owners(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
-    owners = crud.get_owners(db, skip, limit)
+    return quiz_questions
 
-    return owners
+@app.delete("/quizzes/{quiz_id}/quizquestions/{quiz_question_id}", response_model=schemas.Question)
+def delete_quiz_question(quiz_id: int, quiz_question_id: int, db: Session = Depends(get_db)):
+    deleted_quiz_question = crud.delete_quiz_questions(db, quiz_id, quiz_question_id)
 
-@app.post("/menuitem/", response_model=schemas.MenuItem)
-def create_menu_item(menu_item: schemas.MenuItemCreate, db: Session = Depends(get_db)):
-    return crud.create_menu_item(db=db, menu_item=menu_item)
+    if deleted_quiz_question is None:
+        raise HTTPException(status_code=404, detail="Quiz or question not found")
 
-@app.get("/menuitems/{restaurant_id}", response_model=list[schemas.MenuItem])
-def read_menu_items(restaurant_id: int, db: Session = Depends(get_db)):
-    menu_items = crud.get_menu_items(db, restaurant_id)
+    return deleted_quiz_question
 
-    if not menu_items:
-        raise HTTPException(status_code=404, detail="Restaurant not found or no items on menu")
+@app.post("/answer/")
+def create_quiz_question_answers(question_answer: schemas.AnswersCreate, db: Session = Depends(get_db)):
+    return crud.create_answer(db=db, question_answer=question_answer)
 
-    return menu_items
+# Function to read QR code from a frame
+def read_qr_code(frame):
+    decoded_objects = decode(frame)
 
-@app.delete("/restaurants/{restaurant_id}/menuitems/{menu_item_id}", response_model=schemas.MenuItem)
-def delete_menu_item(restaurant_id: int, menu_item_id: int, db: Session = Depends(get_db)):
-    deleted_menu_item = crud.delete_menu_item(db, restaurant_id, menu_item_id)
+    if decoded_objects:
+        qr_code = decoded_objects[0]
+        orientation = qr_code.orientation
+        data = qr_code.data.decode('utf-8')
 
-    if deleted_menu_item is None:
-        raise HTTPException(status_code=404, detail="Restaurant or menu not found")
+        if orientation == 'UP':
+            letter_orientation = 'A'
+        elif orientation == 'RIGHT':
+            letter_orientation = 'B'
+        elif orientation == 'DOWN':
+            letter_orientation = 'C'
+        elif orientation == 'LEFT':
+            letter_orientation = 'D'
+        else:
+            letter_orientation = orientation
 
-    return deleted_menu_item
+        return {"orientation": letter_orientation, "data": data}
+    else:
+        return None

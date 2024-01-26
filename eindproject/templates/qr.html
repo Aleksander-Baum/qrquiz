@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+    <style>
+        body {
+            padding: 20px;
+            background-color: #F5F5F5;
+        }
+
+        .quiz-container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 150px;
+            position: relative;
+            background-color: rgba(211, 211, 211, 0.4);
+            border: 3px solid #ec6639;
+        }
+
+        .answer-box {
+            margin-top: 50px;
+        }
+
+        .btn {
+            padding: 20px;
+            border: 0;
+            color: white;
+        }
+
+        .next-btn {
+            position: absolute;
+            width: 200px;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .quit-btn {
+            position: absolute;
+            width: 200px;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .finish-btn {
+            position: absolute;
+            width: 200px;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+
+        img {
+            width: 200px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <img src="static/afbeelding.png" alt="thomasmore">
+    <div class="quiz-container container-fluid">
+        <h1 id="quiz-title">quiznaam</h1>
+        <h2 class="mb-4" id="question_title">Question: What is the capital of France?</h2>
+
+        <div class="row answer-box">
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" id="option_a" style="background-color: green;">Option A</button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" id="option_b" style=" background-color: #fcba03;">Option B</button>
+            </div>
+        </div>
+
+        <div class="row answer-box">
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" id="option_c" style="background-color: blue;">Option C</button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" id="option_d" style="background-color: red;">Option D</button>
+            </div>
+        </div>
+        <p id="scanned-codes-container"></p>
+    </div>
+
+    <button onclick="startScan()">Start Scan</button>
+    <button onclick="stopScan()">Stop Scan</button>
+
+    <button class="btn btn-primary quit-btn" id="quit" style="background-color: #ec6639;">Quit</button>
+    <button class="btn btn-primary finish-btn" id="finish" style="background-color: #ec6639;">Finish</button>
+    <button class="btn btn-primary next-btn" id="next" style="background-color: #ec6639;">Next</button>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        function startScan() {
+            socket.emit('start_scan');
+        }
+
+        function stopScan() {
+            socket.emit('stop_scan');
+        }
+
+        socket.on('scan_result', function(data) {
+            console.log("Final QR Code Dictionary:", data);
+            // Handle the scan result as needed
+
+            displayScannedQRCode(data);
+        });
+
+        function displayScannedQRCode(data) {
+            const scannedCodesContainer = document.getElementById('scanned-codes-container');
+
+            const scannedCodeElement = document.createElement('div');
+            scannedCodeElement.innerText = `Scanned QR Code: ${JSON.stringify(data)}`;
+
+            setTimeout(() => {
+            scannedCodesContainer.appendChild(scannedCodeElement);
+            }, 0);
+        }
+
+        socket.on('scan_stopped', function(message) {
+            console.log(message);
+            // Handle the scan stopped message as needed
+        });
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const quizId = urlParams.get('quizId');
+
+            const quizDetailsResponse = await fetch(`http://127.0.0.1:8000/quizzes/${quizId}`);
+            const quizDetails = await quizDetailsResponse.json();
+            const quizTitle = quizDetails.name;
+
+            document.getElementById('quiz-title').innerText = quizTitle;
+
+            const quizQuestionsResponse = await fetch(`http://127.0.0.1:8000/questions/${quizId}`);
+            const quizQuestions = await quizQuestionsResponse.json();
+
+            let currentQuestionIndex = 0;
+
+            function displayQuestion() {
+                const currentQuestion = quizQuestions[currentQuestionIndex];
+                const questionTitle = document.getElementById('question_title');
+                const optionA = document.getElementById('option_a');
+                const optionB = document.getElementById('option_b');
+                const optionC = document.getElementById('option_c');
+                const optionD = document.getElementById('option_d');
+                const nextButton = document.getElementById('next');
+                const quitButton = document.getElementById('quit');
+                const finishButton = document.getElementById('finish');
+
+                if (currentQuestion) {
+                    questionTitle.innerText = `Question: ${currentQuestion.question_title}`;
+                    optionA.innerText = `Option A: ${currentQuestion.answer_a}`;
+                    optionB.innerText = `Option B: ${currentQuestion.answer_b}`;
+                    optionC.innerText = `Option C: ${currentQuestion.answer_c}`;
+                    optionD.innerText = `Option D: ${currentQuestion.answer_d}`;
+
+                    nextButton.addEventListener('click', () => {
+
+                        if (currentQuestionIndex < quizQuestions.length - 1) {
+                            currentQuestionIndex++;
+                            displayQuestion();
+                        } else {
+                            nextButton.style.display = 'none';
+                            quitButton.style.display = 'none';
+                            finishButton.style.display = 'block';
+                        }
+                    });
+
+                    quitButton.addEventListener('click', () => {
+                        window.location.href = 'http://127.0.0.1:8000';
+                    });
+
+                    finishButton.addEventListener('click', () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const quizId = urlParams.get('quizId');
+                        window.location.href = `http://127.0.0.1:8000/static/stats.html?quizId=${quizId}`;
+                    });
+                }
+            }
+            displayQuestion();
+        });
+    </script>
+</body>
+</html>

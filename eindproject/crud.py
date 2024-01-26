@@ -1,62 +1,52 @@
 from sqlalchemy.orm import Session
 
-import auth
 import models
 import schemas
 
-
-def get_restaurant(db: Session, restaurant_id: int):
-    return db.query(models.Restaurant).filter(models.Restaurant.id == restaurant_id).first()
-
-def get_restaurants(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Restaurant).offset(skip).limit(limit).all()
-
-def create_restaurant(db: Session, restaurant:schemas.RestaurantCreate):
-    db_restaurant = models.Restaurant(**restaurant.dict())
-    db.add(db_restaurant)
+def create_quiz(db: Session, quiz:schemas.QuizCreate):
+    db_quiz = models.Quiz(**quiz.dict())
+    db.add(db_quiz)
     db.commit()
-    db.refresh(db_restaurant)
-    return db_restaurant
+    db.refresh(db_quiz)
+    return db_quiz
 
-def update_restaurant(db: Session, restaurant_id: int, address: str):
-    db_restaurant = db.query(models.Restaurant).filter(models.Restaurant.id == restaurant_id).first()
+def get_quiz(db: Session, quiz_id: int):
+    return db.query(models.Quiz).filter(models.Quiz.id == quiz_id).first()
 
-    if db_restaurant:
-        db_restaurant.address = address
+def get_quizzes(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Quiz).offset(skip).limit(limit).all()
+
+def create_teacher(db: Session, teacher:schemas.TeacherCreate):
+    db_teacher = models.Teacher(name=teacher.name, course=teacher.course, quiz_id=teacher.quiz_id)
+    db.add(db_teacher)
+    db.commit()
+    db.refresh(db_teacher)
+    return db_teacher
+
+def get_teachers(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Teacher).offset(skip).limit(limit).all()
+
+def get_quiz_questions(db: Session, quiz_id: int):
+    return db.query(models.Questions).filter(models.Questions.quiz_id == quiz_id).all()
+
+def create_quiz_questions(db: Session, quiz_question: schemas.QuestionCreate):
+    db_quiz_question = models.Questions(**quiz_question.dict())
+    db.add(db_quiz_question)
+    db.commit()
+    db.refresh(db_quiz_question)
+    return db_quiz_question
+
+def delete_quiz_questions(db: Session, quiz_id: int, quiz_questions_id: int):
+    db_quiz_question = db.query(models.Questions).filter(models.Questions.id == quiz_questions_id, models.Questions.quiz_id == quiz_id).first()
+    if db_quiz_question:
+        db.delete(db_quiz_question)
         db.commit()
-        db.refresh(db_restaurant)
-        return db_restaurant
-
+        return db_quiz_question
     return None
 
-def get_owners(db: Session, skip:int = 0, limit: int = 100):
-    return db.query(models.Owner).offset(skip).limit(limit).all()
-
-def get_owner_by_name(db: Session, name: str):
-    return db.query(models.Owner).filter(models.Owner.name == name).first()
-
-def create_owner(db: Session, owner:schemas.OwnerCreate):
-    hashed_password = auth.get_password_hash(owner.password)
-    db_owner = models.Owner(name=owner.name, hashed_password=hashed_password, telephone=owner.telephone, restaurant_id=owner.restaurant_id)
-    db.add(db_owner)
+def create_answer(db: Session, question_answer: schemas.AnswersCreate):
+    db_question_answer = models.Answers(r_number=question_answer.r_number, answer=question_answer.answer, question_id=question_answer.question_id, quiz_id=question_answer.quiz_id)
+    db.add(db_question_answer)
     db.commit()
-    db.refresh(db_owner)
-    return db_owner
-
-def get_menu_items(db: Session, restaurant_id: int):
-    return db.query(models.MenuItem).filter(models.MenuItem.restaurant_id == restaurant_id).all()
-
-def create_menu_item(db: Session, menu_item: schemas.MenuItemCreate):
-    db_menu_item = models.MenuItem(**menu_item.dict())
-    db.add(db_menu_item)
-    db.commit()
-    db.refresh(db_menu_item)
-    return db_menu_item
-
-def delete_menu_item(db: Session, restaurant_id: int, menu_item_id: int):
-    db_menu_item = db.query(models.MenuItem).filter(models.MenuItem.id == menu_item_id, models.MenuItem.restaurant_id == restaurant_id).first()
-    if db_menu_item:
-        db.delete(db_menu_item)
-        db.commit()
-        return db_menu_item
-    return None
+    db.refresh(db_question_answer)
+    return db_question_answer

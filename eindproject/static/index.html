@@ -2,93 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Basisproject frontend</title>
+    <title>QR Quiz SW2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        img {
+            width: 200px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
 </head>
 <body>
+<img src="static/afbeelding.png" alt="thomasmore">
     <div class="container">
-        <div class="row">
-            <h1 class="text-center display-3 fw-bold">Restaurant Frontend</h1>
+        <div class="row mb-5">
+            <h1 class="text-center display-3 fw-bold mt-5 mb-3">QR Quiz</h1>
             <div class="bg-light border rounded">
 
                 <div class="my-4 m-2">
-                    <h2 class="text-center text-primary">All restaurants</h2>
-                    <ul class="list-group" id="restaurants-list">
+                    <h2 class="text-center text-primary mb-4">All quizzes</h2>
+                    <ul class="list-group" id="quizzes-list">
                     </ul>
                 </div>
 
-                <h2>Add restaurant</h2>
-                <form id="restaurant-form">
+                <h2>Add quiz</h2>
+                <form id="quiz-form">
                     <label class="form-label" for="name">Name:</label>
                     <input type="text" class="form-control mb-3" id="name" name="name" required>
 
-                    <label class="form-label" for="address">Address:</label>
-                    <input type="text" class="form-control  mb-3" id="address" name="address" required>
-
-                    <label class="form-label" for="rating">Rating:</label>
-                    <input type="float" class="form-control mb-3" id="rating" name="rating" required>
-
-                    <button class="btn btn-primary" type="submit">Add restaurant</button>
+                    <button class="btn btn-primary" type="submit">Add quiz</button>
                 </form>
 
 
                 <div class="my-4 m-2">
-                    <h2 class="text-center text-primary">All owners</h2>
-                    <ul class="list-group" id="owners-list">
+                    <h2 class="text-center text-primary mb-4">All teachers</h2>
+                    <ul class="list-group" id="teachers-list">
 
                     </ul>
                 </div>
 
 
-                <h2>Add owner</h2>
-                <form id="owner-form">
-                    <label class="form-label" for="ownername">Name:</label>
-                    <input class="form-control mb-3" type="text" id="ownername" name="ownername" required>
+                <h2>Add teacher</h2>
+                <form id="teacher-form">
+                    <label class="form-label" for="teachername">Name:</label>
+                    <input class="form-control mb-3" type="text" id="teachername" name="teachername" required>
 
-                    <label class="form-label" for="telephone">Telephone:</label>
-                    <input class="form-control mb-3" type="text" id="telephone" name="telephone" required>
+                    <label class="form-label" for="course">Course:</label>
+                    <input class="form-control mb-3" type="text" id="course" name="course" required>
 
-                    <label class="form-label" for="restaurant_id">Restaurant ID:</label>
-                    <input class="form-control mb-3" type="number" id="restaurant_id" name="restaurant_id" required>
+                    <label class="form-label" for="quiz_id">Quiz ID:</label>
+                    <input class="form-control mb-3" type="number" id="quiz_id" name="quiz_id" required>
 
-                    <button class="btn btn-primary" type="submit">Add owner</button>
+                    <button class="btn btn-primary mb-3" type="submit">Add teacher</button>
                 </form>
 
-                <h2>Menu items from restaurant</h2>
-                <div id="getrestaurantitem-form">
-                    <label class="form-label" for="get_restaurant_id">Restaurant ID:</label>
-                    <input class="form-control mb-3" type="number" id="get_restaurant_id" name="get_restaurant_id" required>
+                <h2>Questions from quiz</h2>
+                <div id="getquizquestion-form">
+                    <label class="form-label" for="get_quiz_id">Quiz ID:</label>
+                    <input class="form-control mb-3" type="number" id="get_quiz_id" name="get_quiz_id" required>
 
-                    <button class="btn btn-primary" onclick="getMenuItemsFromID()">Get items from restaurant</button>
+                    <button class="btn btn-primary" onclick="getQuizQuestion()">Get questions from quiz</button>
                 </div>
 
 
                 <div class="my-4 m-2">
-                    <ul class="list-group" id="restaurant-item-list">
+                    <ul class="list-group" id="quiz-item-list">
 
                     </ul>
                 </div>
 
-                <h2>Add menu item</h2>
-                <form id="restaurantitem-form">
+                <h2>Add quiz question</h2>
+                <form id="quizquestion-form">
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <label class="form-label" for="item_name">Item Name:</label>
-                            <input class="form-control mb-3" type="text" id="item_name" name="item_name" required>
+                            <label class="form-label" for="question_title">Question title:</label>
+                            <input class="form-control mb-3" type="text" id="question_title" name="question_title" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label" for="description">Description:</label>
-                            <input class="form-control mb-3" type="text" id="description" name="description" required>
+                            <label class="form-label" for="answer_a">Answer A:</label>
+                            <input class="form-control mb-3" type="text" id="answer_a" name="answer_a" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label" for="price">Price:</label>
-                            <input class="form-control mb-3" type="float" id="price" name="price" required>
+                            <label class="form-label" for="answer_b">Answer B:</label>
+                            <input class="form-control mb-3" type="text" id="answer_b" name="answer_b" required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label class="form-label" for="item_restaurant_id">Restaurant ID:</label>
-                            <input class="form-control mb-3" type="number" id="item_restaurant_id" name="item_restaurant_id" required>
+                            <label class="form-label" for="answer_c">Answer C:</label>
+                            <input class="form-control mb-3" type="text" id="answer_c" name="answer_c" required>
                         </div>
-                        <button class="btn btn-primary" type="submit">Add menu item</button>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="answer_d">Answer D:</label>
+                            <input class="form-control mb-3" type="text" id="answer_d" name="answer_d" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="correct_answer">Correct answer:</label>
+                            <select class="form-select mb-3" id="correct_answer" name="correct_answer" required>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="quiz_question_id">Quiz ID:</label>
+                            <input class="form-control mb-3" type="number" id="quiz_question_id" name="quiz_question_id" required>
+                        </div>
+                        <button class="btn btn-primary p-3" type="submit">Add quiz question</button>
                     </div>
                 </form>
             </div>
@@ -97,7 +117,7 @@
 
 
     <script>
-        async function createRestaurant(event) {
+        async function createQuiz(event) {
             event.preventDefault();
 
             const form = event.target;
@@ -105,11 +125,9 @@
 
             const data = {
                 name: formData.get('name'),
-                address: formData.get('address'),
-                rating: formData.get('rating'),
             };
 
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/restaurant/', {
+            const response = await fetch('http://127.0.0.1:8000/quiz/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,44 +137,62 @@
 
             if (response.ok) {
                 form.reset();
-                getRestaurants();
+                getQuizzes();
             } else {
-                console.error('Failed to create item');
+                console.error('Failed to create quiz');
             }
         }
 
-        async function getRestaurants() {
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/restaurants/');
+        async function getQuizzes() {
+            const response = await fetch('http://127.0.0.1:8000/quizzes/');
             const data = await response.json();
 
-            const restaurantList = document.getElementById('restaurants-list');
-            restaurantList.innerHTML = '';
+            const quizList = document.getElementById('quizzes-list');
+            quizList.innerHTML = '';
 
-            data.forEach(restaurant => {
-                const listRestaurant = document.createElement('li');
-                listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating} - ID: ${restaurant.id}`;
+            data.forEach(quiz => {
+                const listQuiz = document.createElement('li');
+                listQuiz.textContent = `Quiz name: ${quiz.name} - ID: ${quiz.id}`;
+
+                listQuiz.dataset.quiz_id = quiz.id;
+                listQuiz.dataset.quiz_name = quiz.name;
+
+                const takeQuiz = document.createElement('button');
+                takeQuiz.textContent = 'Start quiz';
+                takeQuiz.classList.add('btn', 'btn-primary', 'float-end');
+
+                takeQuiz.addEventListener('click', ( ) => startQuiz(quiz.id, quiz.name));
 
                 // Add class to the created <li> element
-                listRestaurant.classList.add('list-group-item');
+                listQuiz.classList.add('list-group-item');
 
-                restaurantList.appendChild(listRestaurant);
+                listQuiz.appendChild(takeQuiz);
+                quizList.appendChild(listQuiz);
             });
-
         }
 
-        async function createOwner(event) {
+        async function startQuiz(quizId, quizName) {
+            const confirmStartQuiz = confirm(`Do you want to start the quiz: ${quizName}?`);
+
+            if (confirmStartQuiz){
+                window.location.href = `http://127.0.0.1:5000/?quizId=${quizId}`;
+            }
+        }
+
+
+        async function createTeacher(event) {
             event.preventDefault();
 
             const form = event.target;
             const formData = new FormData(form);
 
             const data = {
-                name: formData.get('ownername'),
-                telephone: formData.get('telephone'),
-                restaurant_id: formData.get('restaurant_id'),
+                name: formData.get('teachername'),
+                course: formData.get('course'),
+                quiz_id: formData.get('quiz_id'),
             };
 
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/owner/', {
+            const response = await fetch('http://127.0.0.1:8000/teacher/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -166,42 +202,45 @@
 
             if (response.ok) {
                 form.reset();
-                getOwners();
+                getTeachers();
             } else {
-                console.error('Failed to create owner');
+                console.error('Failed to create teacher');
             }
         }
 
-        async function getOwners() {
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/owners/');
+        async function getTeachers() {
+            const response = await fetch('http://127.0.0.1:8000/teachers/');
             const data = await response.json();
 
-            const ownerList = document.getElementById('owners-list');
-            ownerList.innerHTML = '';
+            const teacherList = document.getElementById('teachers-list');
+            teacherList.innerHTML = '';
 
-            data.forEach(owner => {
-               const listOwner = document.createElement('li');
-               listOwner.textContent = `Owner name: ${owner.name} - Telephone: ${owner.telephone} - Restaurant ID: ${owner.restaurant_id}`;
-               listOwner.classList.add('list-group-item');
+            data.forEach(teacher => {
+               const listTeacher = document.createElement('li');
+               listTeacher.textContent = `Teacher name: ${teacher.name} - Course: ${teacher.course} - Quiz ID: ${teacher.quiz_id}`;
+               listTeacher.classList.add('list-group-item');
 
-               ownerList.appendChild(listOwner)
+               teacherList.appendChild(listTeacher)
             });
         }
 
-        async function createMenuItem(event) {
+        async function createQuizQuestion(event) {
             event.preventDefault();
 
             const form = event.target;
             const formData = new FormData(form);
 
             const data = {
-                item_name: formData.get('item_name'),
-                description: formData.get('description'),
-                price: formData.get('price'),
-                restaurant_id: formData.get('item_restaurant_id'),
+                question_title: formData.get('question_title'),
+                answer_a: formData.get('answer_a'),
+                answer_b: formData.get('answer_b'),
+                answer_c: formData.get('answer_c'),
+                answer_d: formData.get('answer_d'),
+                correct_answer: formData.get('correct_answer').toUpperCase(),
+                quiz_id: formData.get('quiz_question_id'),
             };
 
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/menuitem/', {
+            const response = await fetch('http://127.0.0.1:8000/question/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -211,34 +250,67 @@
 
             if (response.ok) {
                 form.reset();
+                console.log('Question created successfully');
             } else {
-                console.error('Failed to create menu item');
+                console.error('Failed to create question:', response.status, response.statusText);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
             }
         }
 
-        async function getMenuItemsFromID() {
-            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/menuitems/'+document.getElementById('get_restaurant_id').value);
+        async function getQuizQuestion() {
+            const response = await fetch('http://127.0.0.1:8000/questions/'+document.getElementById('get_quiz_id').value);
             const data = await response.json();
             console.log(data);
 
-            const itemList = document.getElementById('restaurant-item-list');
-            itemList.innerHTML = '';
+            const questionList = document.getElementById('quiz-item-list');
+            questionList.innerHTML = '';
 
-            data.forEach(item => {
-               const listItem = document.createElement('li');
-               listItem.textContent = `Menu item name: ${item.item_name} - Description: ${item.description} - Price: ${item.price}`;
-               listItem.classList.add('list-group-item');
+            data.forEach(question => {
+               const questionItem = document.createElement('li');
+               questionItem.textContent = `Question: ${question.question_title} - Answer A: ${question.answer_a} - Answer B: ${question.answer_b} - Answer C: ${question.answer_c} - Answer D: ${question.answer_d} - Correct answer: ${question.correct_answer} - Question ID: ${question.id}`;
+               questionItem.classList.add('list-group-item');
 
-               itemList.appendChild(listItem)
+               questionItem.dataset.quiz_id = question.quiz_id;
+               questionItem.dataset.quiz_question_id = question.id;
+
+               const deleteButton = document.createElement('button');
+               deleteButton.textContent = 'Delete';
+               deleteButton.classList.add('btn', 'btn-danger', 'float-end');
+               deleteButton.addEventListener('click', ( ) => deleteQuizQuestion(deleteButton));
+
+               questionItem.appendChild(deleteButton);
+               questionList.appendChild(questionItem);
             });
         }
 
-        document.getElementById('restaurant-form').addEventListener('submit', createRestaurant);
-        document.getElementById('owner-form').addEventListener('submit', createOwner);
-        document.getElementById('restaurantitem-form').addEventListener('submit', createMenuItem);
+        async function deleteQuizQuestion(button) {
+            const listItem = button.parentElement;
+            const quizId = listItem.dataset.quiz_id;
+            const questionId = listItem.dataset.quiz_question_id;
 
-        getRestaurants()
-        getOwners()
+            const confirmDelete = confirm(`Do you want to remove question with id: ${questionId}?`);
+
+            if (confirmDelete) {
+                const response = await fetch(`http://127.0.0.1:8000/quizzes/${quizId}/quizquestions/${questionId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    listItem.remove();
+                } else {
+                    console.error('Failed to remove question');
+                }
+            }
+        }
+
+        document.getElementById('quiz-form').addEventListener('submit', createQuiz);
+        document.getElementById('teacher-form').addEventListener('submit', createTeacher);
+        document.getElementById('quizquestion-form').addEventListener('submit', createQuizQuestion);
+
+        getQuizzes()
+        getTeachers()
+        getQuizQuestion()
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

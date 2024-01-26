@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-geo-assets/maps/faroe-islands.js"></script>
+    <script src="https://cdn.plot.ly/plotly-geo-assets/maps/denmark.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #F5F5F5;
+        }
+
+        .quiz-container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 150px;
+            position: relative;
+            background-color: rgba(211, 211, 211, 0.4);
+            border: 3px solid #ec6639;
+        }
+
+        .btn {
+            padding: 20px;
+            width: 150px;
+            border: 0;
+            color: white;
+        }
+
+        img {
+            width: 200px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .chart-container {
+            text-align: center;
+        }
+
+        /* Style for the button container */
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="afbeelding.png" alt="thomasmore">
+    <div class="quiz-container container">
+        <h1 id="quiz-title">quiznaam</h1>
+        <h2 class="mb-4" id="question_title"></h2>
+        <!-- Use a <div> with an id to dynamically populate quiz questions -->
+        <div id="quiz-questions-container"></div>
+
+        <!-- Add a div for the chart container -->
+        <div class="chart-container" id="chart-container"></div>
+    </div>
+
+    <!-- Button container outside of the chart container -->
+    <div class="button-container">
+        <button class="btn btn-primary quit-btn" id="quit" style="background-color: #ec6639;">Quit</button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add the mpld3 library -->
+    <script src="https://mpld3.github.io/js/mpld3.v0.5.2.js"></script>
+    <!-- Your Matplotlib chart JavaScript code here -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Fetch the quizId from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const quizId = urlParams.get('quizId');
+
+            // Fetch the quiz details using the quizId
+            const quizDetailsResponse = await fetch(`http://127.0.0.1:8000/quizzes/${quizId}`);
+            const quizDetails = await quizDetailsResponse.json();
+            const quizTitle = quizDetails.name;
+            const quitButton = document.getElementById('quit');
+
+            quitButton.addEventListener('click', () => {
+                window.location.href = 'http://127.0.0.1:8000';
+            });
+
+            // Update the content of the #quiz-title element with the dynamically fetched quiz name
+            document.getElementById('quiz-title').innerText = quizTitle;
+
+            // Fetch quiz questions for the current quiz
+            const quizQuestionsResponse = await fetch(`http://127.0.0.1:8000/questions/${quizId}`);
+            const quizQuestions = await quizQuestionsResponse.json();
+
+            // Iterate through each question and create a graph
+            for (let index = 0; index < quizQuestions.length; index++) {
+                const question = quizQuestions[index];
+
+                // Display each question title above its chart
+                const questionTitleContainer = document.createElement('h2');
+                questionTitleContainer.innerText = `Question ${index + 1}: ${question.question_title}`;
+                document.getElementById('quiz-questions-container').appendChild(questionTitleContainer);
+
+                // Create a separate container for each question
+                const questionContainer = document.createElement('div');
+                questionContainer.id = `question-container-${index + 1}`;
+                questionContainer.className = 'chart-container';
+
+                // Append the question container to the main container
+                document.getElementById('quiz-questions-container').appendChild(questionContainer);
+
+                // Create the graph inside the question container
+                await createGraphForQuestion(quizId, question, index + 1);
+            }
+        });
+
+        async function createGraphForQuestion(quizId, question, questionNumber) {
+            try {
+                console.log(`Fetching data for Question ${questionNumber}...`);
+
+                // Fetch data specific to each question
+                const questionDataResponse = await fetch(`http://127.0.0.1:8000/questions/${quizId}/${question.id}`);
+                const questionData = await questionDataResponse.json();
+
+                console.log(`Data for Question ${questionNumber} fetched successfully:`, questionData);
+
+                const categories = ["A", "B", "C", "D"];
+                const colors = ['green', '#fcba03', 'blue', 'red'];
+
+                // Assume you have a field named 'options' in your question data
+                const data_values = questionData.options.map(option => option.count);
+
+                const data = [{
+                    type: 'bar',
+                    x: categories,
+                    y: data_values,
+                    marker: {
+                        color: colors
+                    }
+                }];
+
+                const layout = {
+                    title: `Question ${questionNumber}: ${question.question_title}`,
+                    xaxis: {
+                        title: 'Options'
+                    },
+                    yaxis: {
+                        title: 'Amount Answers %'
+                    }
+                };
+
+                // Create the graph inside the question container
+                Plotly.newPlot(`question-container-${questionNumber}`, data, layout);
+
+                console.log(`Chart for Question ${questionNumber} created successfully!`);
+            } catch (error) {
+                console.error(`Error creating chart for Question ${questionNumber}: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

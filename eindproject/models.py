@@ -1,30 +1,40 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 
 from database import Base
 
 
-class Restaurant(Base):
-    __tablename__ = "restaurants"
+class Quiz(Base):
+    __tablename__ = "quiz"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, index=True)
-    address = Column(String(75), index=True)
-    rating = Column(Float, index=True)
 
-class Owner(Base):
-    __tablename__ = "owners"
+class Teacher(Base):
+    __tablename__ = "teacher"
 
     id = Column(Integer, primary_key=True, index=True)
-    name= Column(String(50), index=True)
-    hashed_password = Column(String(100), index=True)
-    telephone = Column(String(20), index=True)
-    restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
+    name = Column(String(50), index=True)
+    course = Column(String(75), index=True)
+    quiz_id = Column(Integer, ForeignKey("quiz.id"))
 
-class MenuItem(Base):
-    __tablename__ = "menuitems"
+class Questions(Base):
+    __tablename__ = "questions"
 
     id = Column(Integer, primary_key=True, index=True)
-    item_name = Column(String(50), index=True)
-    description = Column(String(255), index=True)
-    price = Column(Float, index=True)
-    restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
+    question_title = Column(String(255), index=True)
+    answer_a = Column(String(255), index=True)
+    answer_b = Column(String(255), index=True)
+    answer_c = Column(String(255), index=True)
+    answer_d = Column(String(255), index=True)
+    correct_answer = Column(Enum('A', 'B', 'C', 'D'), index=True)
+    quiz_id = Column(Integer, ForeignKey("quiz.id"))
+
+class Answers(Base):
+    __tablename__ = "answers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    r_number = Column(String(20), index=True)
+    answer = Column(String(5), index=True)
+    quiz_id = Column(Integer, ForeignKey("quiz.id"))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+

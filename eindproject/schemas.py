@@ -1,44 +1,67 @@
+from typing import List
 from pydantic import BaseModel
 
-class RestaurantBase(BaseModel):
+class QuizBase(BaseModel):
     name: str
-    address: str
-    rating: float
 
-class RestaurantCreate(RestaurantBase):
+class QuizCreate(QuizBase):
     pass
 
-class Restaurant(RestaurantBase):
+class Quiz(QuizBase):
     id: int
 
     class Config:
         orm_mode = True
 
-class OwnerBase(BaseModel):
+class TeacherBase(BaseModel):
     name: str
-    telephone: str
-    restaurant_id: int
+    course: str
+    quiz_id: int
 
-class OwnerCreate(OwnerBase):
-    password: str
+class TeacherCreate(TeacherBase):
+    pass
 
-class Owner(OwnerBase):
+class Teacher(TeacherBase):
     id: int
 
     class Config:
         orm_mode = True
 
-class MenuItemBase(BaseModel):
-    item_name: str
-    description: str
-    price: float
-    restaurant_id: int
+class QuestionBase(BaseModel):
+    question_title: str
+    answer_a: str
+    answer_b: str
+    answer_c: str
+    answer_d: str
+    correct_answer: str
+    quiz_id: int
 
-class MenuItemCreate(MenuItemBase):
+class QuestionCreate(QuestionBase):
     pass
 
-class MenuItem(MenuItemBase):
+class Question(QuestionBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+class AnswersBase(BaseModel):
+    r_number: str
+    answer: str
+    question_id: int
+    quiz_id: int
+
+class AnswersCreate(AnswersBase):
+    pass
+
+class Answers(AnswersBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class QuestionWithAnswers(QuestionBase):
+    answers: List[Answers] = []
 
     class Config:
         orm_mode = True
